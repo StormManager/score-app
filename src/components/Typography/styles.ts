@@ -73,28 +73,38 @@ export const variantStyles: Record<string, RuleSet<object>> = {
 
 export const textStyles: Record<string, RuleSet<object>> = {
   LargeTitle: css`
-    font-size: 26px;
-    line-height: 35px;
+    font-size: 48x;
+    line-height: 60px;
+    font-family: 'Pretendard-SemiBold';
+  `,
+  Title01R: css`
+    font-size: 32px;
+    line-height: 42px;
+    font-family: 'Pretendard-Regular';
+  `,
+  Title01SB: css`
+    font-size: 32px;
+    line-height: 42px;
     font-family: 'Pretendard-SemiBold';
   `,
   Title02R: css`
-    font-size: 22px;
-    line-height: 30px;
+    font-size: 28px;
+    line-height: 36px;
     font-family: 'Pretendard-Regular';
   `,
   Title02SB: css`
-    font-size: 22px;
-    line-height: 30px;
+    font-size: 28px;
+    line-height: 36px;
     font-family: 'Pretendard-SemiBold';
   `,
   Title03R: css`
-    font-size: 20px;
-    line-height: 28px;
+    font-size: 22px;
+    line-height: 30px;
     font-family: 'Pretendard-Regular';
   `,
   Title03SB: css`
-    font-size: 20px;
-    line-height: 28px;
+    font-size: 22px;
+    line-height: 30px;
     font-family: 'Pretendard-SemiBold';
   `,
   Title04R: css`
@@ -107,117 +117,59 @@ export const textStyles: Record<string, RuleSet<object>> = {
     line-height: 24px;
     font-family: 'Pretendard-SemiBold';
   `,
-  Body05R: css`
+  Body01R: css`
     font-size: 16px;
     line-height: 22px;
     font-family: 'Pretendard-Regular';
   `,
-  Body05SB: css`
+  Body01SB: css`
     font-size: 16px;
     line-height: 22px;
     font-family: 'Pretendard-SemiBold';
   `,
-  Body06R: css`
+  Body02R: css`
     font-size: 14px;
     line-height: 22px;
     font-family: 'Pretendard-Regular';
   `,
-  Body06SB: css`
+  Body02SB: css`
     font-size: 14px;
     line-height: 22px;
     font-family: 'Pretendard-SemiBold';
   `,
-  Body07CaptionSB: css`
-    font-size: 13px;
-    line-height: 19px;
-    font-family: 'Pretendard-Regular';
-  `,
-  CaptionR: css`
-    font-size: 13px;
-    line-height: 19px;
-    font-family: 'Pretendard-Regular';
-    letter-spacing: -0.2px;
-  `,
-  CaptionSB: css`
-    font-size: 13px;
-    line-height: 19px;
-    font-family: 'Pretendard-SemiBold';
-    letter-spacing: -0.2px;
-  `,
-  BottomButtonR: css`
+  Button01R: css`
     font-size: 17px;
     line-height: 22px;
     font-family: 'Pretendard-Regular';
   `,
-  BottomButtonSB: css`
+  Button01SB: css`
     font-size: 17px;
     line-height: 22px;
     font-family: 'Pretendard-SemiBold';
   `,
-  Button09R: css`
+  Button02R: css`
     font-size: 15px;
-    line-height: 21px;
-    font-family: 'Pretendard-Regular';
-  `,
-  Button09SB: css`
-    font-size: 15px;
-    line-height: 21px;
-    font-family: 'Pretendard-SemiBold';
-  `,
-  Button10R: css`
-    font-size: 13px;
-    line-height: 19px;
-    font-family: 'Pretendard-Regular';
-  `,
-  Button10SB: css`
-    font-size: 13px;
-    line-height: 19px;
-    font-family: 'Pretendard-SemiBold';
-  `,
-  MediumLabel: css`
-    font-size: 14px;
-    line-height: 22px;
-    font-family: 'Pretendard-Regular';
-  `,
-  SmallLabel: css`
-    font-size: 12px;
-    line-height: 14px;
-    font-family: 'Pretendard-Regular';
-    letter-spacing: -0.5px;
-  `,
-  InputText: css`
-    font-size: 20px;
-    line-height: 24px;
-    font-family: 'Pretendard-Regular';
-  `,
-  BoxInputText: css`
-    font-size: 16px;
-    line-height: 12px;
-    font-family: 'Pretendard-Regular';
-  `,
-  Badge: css`
-    font-size: 12px;
-    line-height: 14.4px;
-    font-family: 'Pretendard-SemiBold';
-  `,
-  Description: css`
-    font-size: 14px;
-    line-height: 22px;
-    font-family: 'Pretendard-Regular';
-  `,
-  MealCount: css`
-    font-size: 14px;
     line-height: 20px;
     font-family: 'Pretendard-Regular';
   `,
-  MealDes: css`
-    font-size: 14px;
-    line-height: 19px;
+  Button02SB: css`
+    font-size: 15px;
+    line-height: 20px;
+    font-family: 'Pretendard-SemiBold';
+  `,
+  Button03R: css`
+    font-size: 12px;
+    line-height: 18px;
     font-family: 'Pretendard-Regular';
   `,
-  BalloonSpot: css`
-    font-size: 13px;
-    line-height: 21px;
-    font-family: 'Pretendard-Regular';
+  Button03SB: css`
+    font-size: 12px;
+    line-height: 18px;
+    font-family: 'Pretendard-SemiBold';
+  `,
+  Label: css`
+    font-size: 16px;
+    line-height: 22px;
+    font-family: 'Pretendard-SemiBold';
   `,
 };
