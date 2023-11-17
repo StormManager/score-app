@@ -2,9 +2,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import LoginScreen, { SCREEN_NAME as LoginScreenName } from './Login';
 import MainScreen, { SCREEN_NAME as MainScreenName } from './Main';
+import { RootScreenPrams } from '../utils/types/navigation';
 
 
-const Root = createNativeStackNavigator();
+const Root = createNativeStackNavigator<RootScreenPrams>();
 const Screen = () => {
   return (
     <Root.Navigator initialRouteName={LoginScreenName}>

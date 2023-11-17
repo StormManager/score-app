@@ -1,7 +1,7 @@
 import React, { ForwardedRef, ReactNode, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import EyeOff from '~assets/icons/TextInput/eyeOff.svg';
 import EyeOn from '~assets/icons/TextInput/eyeOn.svg';
-import { Controller, FieldValues, RegisterOptions, useFormContext } from 'react-hook-form';
+import { Controller, FieldValues, RegisterOptions, useFormContext, FieldErrors } from 'react-hook-form';
 import styled, { css, useTheme } from 'styled-components/native';
 import Typography from '../Typography';
 import { Alert, TextInput, TouchableOpacity, ViewStyle } from 'react-native';
@@ -54,6 +54,7 @@ interface ITextInputStyleProps {
   editable: boolean;
   paddings?: string;
 }
+
 const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
   const {
     name,
@@ -64,6 +65,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
     isEditable = true,
     isPassword,
     suffix,
+    padding,
     style,
     rest,
   } = props;
@@ -72,7 +74,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
     watch,
     formState: { errors },
     resetField,
-  } = useFormContext();
+  } = useFormContext<FieldValues>();
   const inputRef = useRef<TextInput | null>(null);
 
   useImperativeHandle(ref, () => inputRef.current as TextInput, [inputRef]);
@@ -85,7 +87,6 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
   });
   const [isDisabled, setIsDisabled] = useState<boolean>();
   const data = watch(name);
-  console.log(data)
   const [isShowing, setIsShowing] = useState(false);
   const themeApp = useTheme();
 
@@ -183,7 +184,9 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
                 <StyledTextInput
                   {...textInputProps}
                   onChangeText={onChange}
-                  text={'Body02R'}
+                  placeholderTextColor={themeApp.colors.gray[7]}
+                  text={'Button01R'}
+                  paddings={padding && padding}
                   suffix={!!suffixContent}
                   timer={timer.remainTime > 0}
                   onBlur={onBlur}
@@ -266,13 +269,12 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
                 </AuthenticationButton>
               )}
             </ControlContainer>
-            {errors?.name?.message && (
+            {errors[name]?.message && (
               <LabelContainer>
                 <Typography
-                  variant="h500"
-                  weight="R"
+                  text='Button03R'
                   textColor={themeApp.colors.error}>
-                  {errors.name.message as string}
+                  {errors[name]?.message as string}
                 </Typography>
               </LabelContainer>
             )}
@@ -299,7 +301,7 @@ const ControlContainer = styled.View<IStyleProps>`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
-  border-radius: 6px;
+  border-radius: 8px;
   /* border: none; */
   ${({ editable }) => {
     if (!editable) {
@@ -361,6 +363,13 @@ const StyledTextInput = styled.TextInput<ITextInputStyleProps>`
         color: black;
         padding-right: 0px;
       `;
+    }
+  }}
+  ${({ paddings }) => {
+    if (paddings) {
+      return css`
+        padding: ${paddings};
+      `
     }
   }}
 `;

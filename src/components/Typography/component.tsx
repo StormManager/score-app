@@ -8,6 +8,7 @@ interface ITypograhpyProps {
   weight?: string
   align?: string;
   option?: string;
+  text?: string;
   textColor?: string;
   lineBreakStrategyIOS?: string;
   [key: string]: any;
@@ -21,6 +22,7 @@ const Component: React.FunctionComponent<ITypograhpyProps> = (props) => {
     align={props.align}
     variant={props.variant}
     option={props.option}
+    text={props.text}
     textColor={props.textColor}
     {...props.key}>
     {props.children}
