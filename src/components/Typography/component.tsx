@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components/native';
 import { optionStyles, textStyles, variantStyles, weightStyles } from './styles';
 

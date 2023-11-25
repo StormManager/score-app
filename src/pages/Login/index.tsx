@@ -6,7 +6,8 @@ import { FieldValue, FieldValues, FormProvider, useForm } from 'react-hook-form'
 import Typography from '../../components/Typography';
 import ButtonRoundSns from '../../components/ButtonRoundSns';
 import { useNavigation } from '@react-navigation/native';
-import { PAGE_NAME as MainPage } from '../Main';
+import { PAGE_NAME as Share } from '../MainTab/Share';
+import { SCREEN_NAME as Main } from '../../screens/Main';
 import { LoginStackProps } from '../../utils/types/navigation';
 interface IMarginBoxProps {
   mt?: string;
@@ -27,7 +28,7 @@ const Pages = ({ route, navigation }: LoginStackProps<"P_LOGIN">) => {
   const idRef = useRef(null);
   const onSubmit = (props: FieldValues) => {
     console.log(props);
-    navigation.replace('S_MAIN', { screen: 'P_LOGIN' })
+    navigation.replace(Main, { screen: Share })
   }
   return (
     <Container>
@@ -71,7 +72,10 @@ const Pages = ({ route, navigation }: LoginStackProps<"P_LOGIN">) => {
               },
             }}
           />
-          <LoginButton disabled={!isDirty || !isValid} onPress={handleSubmit(onSubmit)}>
+          <LoginButton
+            disabled={!isDirty || !isValid}
+            onPress={handleSubmit(onSubmit)}
+          >
             <Typography text={"Button01R"} textColor={!isDirty || !isValid ? themeApp.colors.gray[6] : themeApp.colors.white} >
               로그인
             </Typography>

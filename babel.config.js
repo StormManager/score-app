@@ -46,6 +46,7 @@ module.exports = api => {
             '~screens': './src/screens',
             '~pages': './src/pages',
             '~components': './src/components',
+            '~context': './src/context',
             '~hooks': './src/hooks',
             '~hook': './src/hook',
             '~utils': './src/utils',

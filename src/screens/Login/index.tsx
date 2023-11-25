@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
+import React from 'react';
 import Login, { PAGE_NAME as LoginPageName } from '../../pages/Login';
 import { LoginStackParam } from '../../utils/types/navigation';
 

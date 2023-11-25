@@ -1,18 +1,27 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
-import Main, { PAGE_NAME as MainPageName } from '../../pages/Main';
-import { HomeStackParam } from '../../utils/types/navigation';
+import React, { useMemo } from 'react';
+import Share, { PAGE_NAME as ShareName } from '../../pages/MainTab/Share';
+import Container, { PAGE_NAME as ContainerName } from '../../pages/MainTab/Container';
+import MyPage, { PAGE_NAME as MyPageName } from '../../pages/MainTab/MyPage';
+import { MainTabParam } from '../../utils/types/navigation';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MainTabBar from '../../layouts/MainTabBar';
+import { useTablet } from '../../context/useIsTablet';
+import { Dimensions, Platform } from 'react-native';
 
-const MainRoot = createNativeStackNavigator<HomeStackParam>();
+const MainRoot = createBottomTabNavigator<MainTabParam>();
 
 export const SCREEN_NAME = 'S_MAIN'
 
+
 export default function MainScreen() {
+
   return (
-    <MainRoot.Navigator>
+    <MainRoot.Navigator tabBar={(props) => <MainTabBar {...props} />} >
       <MainRoot.Group screenOptions={{ headerShown: false }}>
-        <MainRoot.Screen name={MainPageName} component={Main} />
+        <MainRoot.Screen name={ShareName} component={Share} />
+        <MainRoot.Screen name={ContainerName} component={Container} />
+        <MainRoot.Screen name={MyPageName} component={MyPage} />
       </MainRoot.Group>
-    </MainRoot.Navigator>
+    </MainRoot.Navigator >
   );
 }

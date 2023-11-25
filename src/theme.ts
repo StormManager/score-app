@@ -1,3 +1,5 @@
+import {Dimensions, Platform} from 'react-native';
+
 type ColorShades = Record<number, string>;
 
 interface Colors {
@@ -14,7 +16,7 @@ interface Theme {
   };
   colors: Colors;
   padding: {
-    content: number;
+    outer: string;
   };
   paddingWrapSm: number;
   paddingVertical: number;
@@ -36,6 +38,7 @@ export const gray: ColorShades = {
 export const primary: ColorShades = {
   0: '#4EC0E9',
   1: '#C7DBF4',
+  2: '#D4E7F9',
 };
 export const white = '#ffffff';
 
@@ -49,14 +52,17 @@ const colors: Colors = {
   error,
   primary,
 };
-
+const {width, height} = Dimensions.get('window');
+const aspectRatio = height / width;
+const isTablet =
+  Platform.OS === 'android' ? aspectRatio < 1.6 : aspectRatio < 1.5;
 const Theme: Theme = {
   font: {
     fontFamily: 'Pretendard-Regular',
   },
   colors,
   padding: {
-    content: 18,
+    outer: isTablet ? '40px' : '24px',
   },
   paddingWrapSm: 12,
   paddingVertical: 16,

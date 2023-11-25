@@ -60,6 +60,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
     name,
     label,
     rules,
+    type,
     placeholder,
     defaultValue,
     isEditable = true,
@@ -67,7 +68,6 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
     suffix,
     padding,
     style,
-    rest,
   } = props;
   const {
     control,
@@ -86,6 +86,8 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
     firstRunning: false,
   });
   const [isDisabled, setIsDisabled] = useState<boolean>();
+
+  const [focus, setFocused] = useState<boolean>(false);
   const data = watch(name);
   const [isShowing, setIsShowing] = useState(false);
   const themeApp = useTheme();
@@ -108,6 +110,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
     suffixContent = (
       <TouchableOpacity
         onPress={() => {
+          console.log(name, data)
           resetField(name);
           if (inputRef !== null)
             inputRef.current?.focus();
@@ -135,7 +138,9 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
   if (timer.remainTime > 0 && !timer.isRunning) {
     setTimer(prev => ({ ...prev, isRunning: true, firstRunning: true }));
   }
-
+  useEffect(() => {
+    console.log(data)
+  }, [data])
   useEffect(() => {
     if (timer.isRunning) {
       const timerId = setTimeout(() => {
@@ -158,7 +163,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
       rules={rules}
       defaultValue={defaultValue && defaultValue}
       render={({ field: { onChange, onBlur } }) => {
-
+        const regExp = /[^0-9]/g;
         const redTimerConditiion =
           // suffix?.timer &&
           (timer.remainTime <= 0 || !timer.isRunning) && timer.firstRunning;
@@ -183,13 +188,14 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
               <InputContainer>
                 <StyledTextInput
                   {...textInputProps}
+                  keyboardType={type}
                   onChangeText={onChange}
                   placeholderTextColor={themeApp.colors.gray[7]}
                   text={'Button01R'}
                   paddings={padding && padding}
                   suffix={!!suffixContent}
                   timer={timer.remainTime > 0}
-                  onBlur={onBlur}
+                  value={data && (type === "numeric" ? data.replace(regExp, "") : data)}
                   secureTextEntry={isPassword ? !isShowing : false}
                 />
               </InputContainer>
