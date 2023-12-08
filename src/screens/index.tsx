@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import LoginScreen, { SCREEN_NAME as LoginScreenName } from './Login';
 import MainScreen, { SCREEN_NAME as MainScreenName } from './Main';
 import CreateRoom, { PAGE_NAME as CreateRoomPageName } from '../pages/CreateRoom';
+import ShareRoom, { PAGE_NAME as ShareRoomPageName } from '../pages/ShareRoom';
 import { RootScreenPrams } from '../utils/types/navigation';
 import { Dimensions, Platform } from 'react-native';
 import { useTablet } from '../context/useIsTablet';
@@ -27,6 +28,7 @@ const Screen = () => {
         <Root.Screen name={LoginScreenName} component={LoginScreen} />
         <Root.Screen name={MainScreenName} component={MainScreen} />
         <Root.Screen name={CreateRoomPageName} component={CreateRoom} />
+        <Root.Screen name={ShareRoomPageName} component={ShareRoom} />
       </Root.Group>
     </Root.Navigator>
   );

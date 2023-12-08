@@ -1,71 +1,63 @@
 module.exports = {
-  root: true,
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    '@react-native',
-    'prettier',
-    'plugin:prettier/recommended',
-  ],
-  settings: {
-    'import/resolver': {
-      typescript: {},
+    root: true,
+    extends: ["@react-native", "standard-with-typescript", "eslint-config-prettier", "plugin:react-hooks/recommended"],
+    parser: "@typescript-eslint/parser",
+    plugins: ["@typescript-eslint", "react", "react-native", "react-hooks"],
+    parserOptions: {
+        ecmaFeatures: {
+            jsx: true
+        },
+        project: "./tsconfig.json"
     },
-  },
-  rules: {
-    'prettier/prettier': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    'import/extensions': 'off',
-  },
-  pathGroups: [
-    {
-      pattern: '~assets/**',
-      group: 'internal',
+    env: {
+        "react-native/react-native": true
     },
-    {
-      pattern: '~screens/**',
-      group: 'internal',
-    },
-    {
-      pattern: '~pages/**',
-      group: 'internal',
-    },
-    {
-      pattern: '~components/**',
-      group: 'internal',
-    },
-    {
-      pattern: '~biz/**',
-      group: 'internal',
-    },
-    {
-      pattern: '~hooks/**',
-      group: 'internal',
-    },
-    {
-      pattern: '~hook/**',
-      group: 'internal',
-    },
-    {
-      pattern: '~theme/**',
-      group: 'internal',
-    },
-    {
-      pattern: '~theme',
-      group: 'internal',
-    },
-    {
-      pattern: '~utils/**',
-      group: 'internal',
-    },
-    {
-      pattern: '@/**',
-      group: 'external',
-    },
-  ],
-  'newlines-between': 'always',
-  alphabetize: {
-    order: 'asc', // sort in ascending order. Options: ['ignore', 'asc', 'desc']
-    caseInsensitive: true, // ignore case. Options: [true, false]
-  },
-  plugins: ['react-hooks', 'prettier'],
+
+    rules: {
+        "prettier/prettier": 0,
+        "react-native/no-inline-styles": 0,
+        "@typescript-eslint/no-confusing-void-expression": 0,
+        "@typescript-eslint/consistent-type-imports": 0,
+        "@typescript-eslint/strict-boolean-expressions": 0,
+        "@typescript-eslint/no-floating-promises": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "@typescript-eslint/consistent-type-definitions": 0,
+        "@typescript-eslint/no-namespace": 0,
+        "@typescript-eslint/array-type": 0,
+        "@typescript-eslint/prefer-nullish-coalescing": 0,
+        "@typescript-eslint/restrict-plus-operands": 0,
+        "@typescript-eslint/no-misused-promises": [
+            "error",
+            {
+                checksVoidReturn: false
+            }
+        ],
+        "import/order": [
+            "warn",
+            {
+                groups: ["builtin", "external", "internal", "type"],
+                pathGroups: [
+                    {
+                        pattern: "react+(|-native)",
+                        group: "builtin",
+                        position: "before"
+                    },
+                    {
+                        pattern: "@**",
+                        group: "external",
+                        position: "after"
+                    }
+                ],
+                alphabetize: {
+                    order: "asc",
+                    caseInsensitive: true
+                },
+                pathGroupsExcludedImportTypes: ["builtin"]
+            }
+        ],
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": ["error"],
+        "react/no-unstable-nested-components": ["error", { allowAsProps: true }]
+    }
 };

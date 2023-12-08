@@ -1,4 +1,5 @@
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
@@ -6,6 +7,7 @@ export type RootScreenPrams = {
   S_LOGIN: {screen: keyof LoginStackParam; params?: any};
   S_MAIN: {screen: keyof MainTabParam; params?: any};
   P_CREATE_ROOM: undefined;
+  P_SHARE_ROOM: {screen: keyof DrawerParam; params?: any};
 };
 type RootStackRouteProp<T extends keyof RootScreenPrams> = RouteProp<
   RootScreenPrams,
@@ -14,6 +16,8 @@ type RootStackRouteProp<T extends keyof RootScreenPrams> = RouteProp<
 type RootNativeStackNavigationProp<T extends keyof RootScreenPrams> =
   T extends 'S_MAIN'
     ? BottomTabNavigationProp<RootScreenPrams, T>
+    : T extends 'P_SHARE_ROOM'
+    ? DrawerNavigationProp<RootScreenPrams, T>
     : NativeStackNavigationProp<RootScreenPrams, T>;
 
 export type RootStackProps<T extends keyof RootScreenPrams> = {
@@ -54,4 +58,25 @@ type MainTabNativeStackNavigationProps<T extends keyof MainTabParam> =
 export type MainTabStackProps<T extends keyof MainTabParam> = {
   route: MainTabStackRouteProp<T>;
   navigation: MainTabNativeStackNavigationProps<T>;
+};
+export type IDrawerProps = {
+  roomName?: string;
+  password?: string;
+  totalUser?: string;
+};
+export type DrawerParam = {
+  D_SHARE_ROOM: IDrawerProps;
+};
+type DrawerStackRouteProp<T extends keyof DrawerParam> = RouteProp<
+  DrawerParam,
+  T
+>;
+type DrawerNativeStackNavigationProps<T extends keyof DrawerParam> =
+  CompositeNavigationProp<
+    NativeStackNavigationProp<RootScreenPrams, 'S_MAIN'>,
+    DrawerNavigationProp<DrawerParam, T>
+  >;
+export type DrawerStackProps<T extends keyof DrawerParam> = {
+  route: DrawerStackRouteProp<T>;
+  navigation: DrawerNativeStackNavigationProps<T>;
 };

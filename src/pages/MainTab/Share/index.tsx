@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View } from 'react-native';
-import ShareRoomCard from './components/ShareRoomCard';
-import { MainTabStackProps } from '../../../utils/types/navigation';
-import styled, { useTheme } from 'styled-components/native';
-import Typography from '../../../components/Typography';
+import { FlatList } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/Fontisto';
-import Search from '../../../components/Search';
+import styled, { useTheme } from 'styled-components/native';
+import ShareRoomCard from './components/ShareRoomCard';
+import { IShareRoomCardProps } from './components/ShareRoomCard/component';
 import Fab from '../../../components/Fab';
 import Modal from '../../../components/Modal';
-import FastImage from 'react-native-fast-image';
-import { IShareRoomCardProps } from './components/ShareRoomCard/component';
+import Search from '../../../components/Search';
+import Typography from '../../../components/Typography';
 import { useTablet } from '../../../context/useIsTablet';
+import CBStyles from '../../../styles/CBStyles';
+import { MainTabStackProps } from '../../../utils/types/navigation';
 import { PAGE_NAME as CreateRoomPageName } from '../../CreateRoom';
 
 export const PAGE_NAME = 'T_SHARE';
 const Pages = ({ navigation }: MainTabStackProps<"T_SHARE">) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectData, setSelectData] = useState<IShareRoomCardProps | undefined>();
-  const { isTablet, setTablet } = useTablet();
-  const [data, setData] = useState<Array<IShareRoomCardProps>>([
+  const { isTablet } = useTablet();
+  const [data] = useState<Array<IShareRoomCardProps>>([
     {
       id: 0,
       title: "참여 인원",
@@ -101,6 +102,10 @@ const Pages = ({ navigation }: MainTabStackProps<"T_SHARE">) => {
         showModal={showModal}
         onClose={onCloseModal}
         title={"참여 인원"}
+        width={CBStyles.adjustScale(562)}
+        height={CBStyles.adjustScale(505)}
+        actionText={'참여하기'}
+        onPressAction={() => { }}
         isLock={selectData?.isLock}
         headerDescription={
           <ApplicationCount >
@@ -109,16 +114,14 @@ const Pages = ({ navigation }: MainTabStackProps<"T_SHARE">) => {
           </ApplicationCount>
         }
       >
-        <ModalContent>
-
-        </ModalContent>
+        <ModalContent />
 
       </Modal>
       <Title>
         <Typography text='Title01SB' textColor={themeApp.colors.gray[2]} >악보 공유방</Typography>
       </Title>
       <SearchBox>
-        <Search isTablet={isTablet} />
+        <Search isTablet={isTablet} placeholder='방 검색' />
       </SearchBox>
       <FlatList
         showsVerticalScrollIndicator={false}
@@ -153,20 +156,22 @@ const Container = styled.View`
   padding: ${({ theme }) => theme.padding.outer};
 `
 const Title = styled.View`
-  padding-bottom: 16px;
+  padding-bottom: ${`${CBStyles.adjustScale(16)}px`};
 `
 const SearchBox = styled.View`
-  height: 92px;
-  padding-bottom: 16px;
+  height: ${`${CBStyles.adjustScale(92)}px`};
+  padding-bottom: ${`${CBStyles.adjustScale(16)}px`};
 `
 
 const ApplicationCount = styled.View`
-  margin-top: 2px;
+  margin-top: ${`${CBStyles.adjustScale(2)}px`};
   flex-direction: row;
   align-items: center;
-  margin-left: 16px;
+  margin-left: ${`${CBStyles.adjustScale(16)}px`};
 `
 const ModalContent = styled.View`
+  padding: ${`${CBStyles.adjustScale(24)}px`};
+  padding-top: ${`${CBStyles.adjustScale(6)}px`};
   flex-direction: row;
   flex-wrap: wrap;
 `

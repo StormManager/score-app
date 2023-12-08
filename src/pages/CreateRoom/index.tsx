@@ -6,7 +6,7 @@ import Typography from "../../components/Typography";
 import RefTextInput from "../../components/RefTextInput";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import FastImage from "react-native-fast-image";
-
+import CBStyles from "../../styles/CBStyles";
 export const PAGE_NAME = "P_CREATE_ROOM"
 
 interface IBoxProps {
@@ -24,7 +24,15 @@ const Pages = ({ navigation }: RootStackProps<"P_CREATE_ROOM">) => {
   const roomPasswordRef = useRef(null);
   const totalUserRef = useRef(null);
   const handleCreateRoom = (data: FieldValues) => {
-    console.log(data)
+    console.log(data.roomName)
+    navigation.replace("P_SHARE_ROOM", {
+      screen: "D_SHARE_ROOM",
+      params: {
+        password: data.password,
+        roomName: data.roomName,
+        totalUser: data.totalUser
+      }
+    })
 
   }
   const totalUserData = watch("totalUser");
@@ -59,7 +67,7 @@ const Pages = ({ navigation }: RootStackProps<"P_CREATE_ROOM">) => {
                   isNeedDelete: true,
                 }
               }
-              padding="12px 24px"
+              padding={`${CBStyles.adjustScale(12)}px ${CBStyles.adjustScale(24)}px`}
               rules={{
                 required: '필수 입력 항목 입니다.',
               }} />
@@ -72,7 +80,7 @@ const Pages = ({ navigation }: RootStackProps<"P_CREATE_ROOM">) => {
                 autoCapitalize="none"
                 placeholder="인원 수"
                 type="numeric"
-                padding="12px 24px"
+                padding={`${CBStyles.adjustScale(12)}px ${CBStyles.adjustScale(24)}px`}
 
               />
             </RowBox>
@@ -88,7 +96,7 @@ const Pages = ({ navigation }: RootStackProps<"P_CREATE_ROOM">) => {
                   isEditable={isEditable}
                   autoCapitalize="none"
                   placeholder="비밀번호"
-                  padding="12px 24px"
+                  padding={`${CBStyles.adjustScale(12)}px ${CBStyles.adjustScale(24)}px`}
 
                 />
               </FlexBox>

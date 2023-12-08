@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +6,7 @@ import {
   Easing,
 } from 'react-native';
 import Touchable from './Touchable';
+import CBStyles from '../../styles/CBStyles';
 
 interface FABProps {
   buttonColor?: string;
@@ -35,7 +35,7 @@ const moveEasingValues = {
 
 const styles = StyleSheet.create({
   addButton: {
-    borderRadius: 50,
+    borderRadius: CBStyles.adjustScale(50),
     alignItems: 'stretch',
     // shadowColor: '#000000',
     // shadowOpacity: 0.8,
@@ -44,21 +44,21 @@ const styles = StyleSheet.create({
     //   height: 1,
     //   width: 0,
     // },
-    elevation: 2,
+    elevation: CBStyles.adjustScale(2),
   },
   fabContainer: {
     position: 'absolute',
-    bottom: 17,
-    right: 17,
-    height: 62,
-    width: 62,
+    bottom: CBStyles.adjustScale(24),
+    right: CBStyles.adjustScale(40),
+    height: CBStyles.adjustScale(62),
+    width: CBStyles.adjustScale(62),
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 50,
+    borderRadius: CBStyles.adjustScale(50),
   },
   addButtonInnerContainer: {
     flex: 1,
-    borderRadius: 50,
+    borderRadius: CBStyles.adjustScale(50),
     alignItems: 'center',
     justifyContent: 'center',
   },

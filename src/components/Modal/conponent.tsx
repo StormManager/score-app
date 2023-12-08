@@ -1,22 +1,30 @@
 import React, { ReactNode, useRef, useState } from "react";
 import FastImage from 'react-native-fast-image';
 import Typography from "../Typography";
-import styled, { useTheme } from "styled-components/native";
+import styled, { css, useTheme } from "styled-components/native";
 import Modal from "react-native-modal";
 import RefTextInput from "../RefTextInput";
 import { FormProvider, useForm } from "react-hook-form";
+import CBStyles from "../../styles/CBStyles";
 
 interface IModalProps {
   showModal: boolean;
   onClose: () => void;
   title: string;
+  height?: number;
+  width?: number;
   headerDescription?: ReactNode;
   children: ReactNode;
-  isLock: boolean | undefined;
+  isLock?: boolean | undefined;
+  actionText: string;
+  onPressAction: () => void
 }
 
-
-const Component = ({ showModal, onClose, title, headerDescription, children, isLock }: IModalProps) => {
+interface IModalSize {
+  height?: number;
+  width?: number;
+}
+const Component = ({ showModal, onClose, title, height, width, headerDescription, children, isLock, actionText, onPressAction }: IModalProps) => {
   const themeApp = useTheme();
   const passwordRef = useRef(null);
   const form = useForm({
@@ -26,9 +34,10 @@ const Component = ({ showModal, onClose, title, headerDescription, children, isL
     animationIn={"fadeInUp"}
     animationOut={"fadeOutDown"}
     isVisible={showModal}
+    onBackdropPress={onClose}
   >
-    <ModalContainer>
-      <FormProvider {...form}>
+    <FormProvider {...form} >
+      <ModalContainer height={height} width={width}>
         <CloseButton onPress={onClose}>
           <FastImage source={require("~assets/images/close.png")} style={{ width: 24, height: 24 }} resizeMode="contain" />
         </CloseButton>
@@ -49,18 +58,18 @@ const Component = ({ showModal, onClose, title, headerDescription, children, isL
                 isPassword={true}
                 autoCapitalize="none"
                 placeholder="비밀번호"
-                padding="12px 24px"
+                padding={`${CBStyles.adjustScale(12)}px ${CBStyles.adjustScale(24)}px`}
               />
             </LockBox>
           }
-          <ModalActionButton>
+          <ModalActionButton onPress={onPressAction}>
             <Typography text="Button01SB" textColor={themeApp.colors.white}>
-              참여하기
+              {actionText}
             </Typography>
           </ModalActionButton>
         </ModalAction>
-      </FormProvider>
-    </ModalContainer>
+      </ModalContainer>
+    </FormProvider>
   </Modal>
 }
 
@@ -70,17 +79,30 @@ export default Component
 
 const ModalHeader = styled.View`
   flex-direction: row;
+  height: ${`${CBStyles.adjustScale(72)}px`};
+  padding: ${`${CBStyles.adjustScale(24)}px`};
 `
-const ModalContainer = styled.View`
+const ModalContainer = styled.View<IModalSize>`
   position: relative;
+  margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.white};
-  padding: 24px;
-  border-radius: 12px;
+  border-radius: ${`${CBStyles.adjustScale(12)}px`};
+  overflow: hidden;
+  ${({ width }) => {
+    if (width) return css`
+      width: ${width}px;
+    `
+  }}
+  ${({ height }) => {
+    if (height) return css`
+      height: ${height}px;
+    `
+  }}
 `
 const CloseButton = styled.Pressable`
   position: absolute;
-  width: 48px;
-  height: 48px;
+  width: ${`${CBStyles.adjustScale(48)}px`};
+  height: ${`${CBStyles.adjustScale(48)}px`};
   top: 12px;
   right: 12px;
   align-items: center;
@@ -89,27 +111,32 @@ const CloseButton = styled.Pressable`
 `
 
 const ModalAction = styled.View`
-  margin-bottom: 16px;
   flex-direction: row;
   display: flex;
   justify-content: flex-end;
+  position: absolute;
+  bottom:${`${CBStyles.adjustScale(40)}px`};
+  left:${`${CBStyles.adjustScale(24)}px`};
+  right:${`${CBStyles.adjustScale(24)}px`};
 
 `
 
 const ModalActionButton = styled.Pressable`
-  padding: 13px 31px;
+  padding-vertical:${`${CBStyles.adjustScale(13)}px`};
+  padding-horizontal:${`${CBStyles.adjustScale(38)}px`};
   background-color: ${({ theme }) => theme.colors.primary[0]};
   justify-content: center;
   align-items: center;
   display: flex;
   justify-self: flex-end;
   align-self: flex-end;
-  border-radius: 8px;
+  border-radius: ${`${CBStyles.adjustScale(8)}px`};
+ 
 `
 const LockBox = styled.View`
   flex:1;
-  margin-right: 24px;
+  margin-right: ${`${CBStyles.adjustScale(24)}px`};
 `
 const ModalContent = styled.View`
-  min-height: 140px;
+  min-height: ${`${CBStyles.adjustScale(140)}px`};
 `

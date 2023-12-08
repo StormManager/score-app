@@ -1,32 +1,41 @@
 import React, { memo } from "react";
 import { useNavigation } from "@react-navigation/native";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 import { css } from "styled-components";
 import Typography from "../components/Typography";
 import { Image } from "react-native";
 
 type Props = {
   label?: string;
+  subLabel?: string;
   back?: boolean;
   actions?: React.ReactNode;
   border?: boolean;
 };
 
-const Header: React.FC<Props> = ({ label, back = true, actions, border = true }) => {
+const Header: React.FC<Props> = ({ label, subLabel, back = true, actions, border = true }) => {
   const navigation = useNavigation<any>();
-
+  const themeApp = useTheme();
   return (
     <Container border={border}>
       <Box align="flex-start">
         {back && (
-          <BackButton onPress={navigation.goBack}>
+          <BackButton onPress={() => {
+            console.log(navigation.canGoBack())
+            if (navigation.canGoBack()) {
+              navigation.goBack()
+            }
+          }}>
             <Image style={{ width: 24, height: 24 }} source={require("~assets/icons/arrow-left.png")} alt="뒤로" resizeMode="contain" />
           </BackButton>
         )}
       </Box>
-      <Typography text="Title04SB">
-        {label}
-      </Typography>
+      <TitleBox>
+        <Typography text="Title04SB" textColor={themeApp.colors.gray[2]}>
+          {label}
+        </Typography>
+        {subLabel && <Typography text="Button03R" textColor={themeApp.colors.gray[4]} >{subLabel}</Typography>}
+      </TitleBox>
       <ActionBox align="flex-end">
         {actions}
       </ActionBox>
@@ -60,6 +69,10 @@ const Box = styled.View<{ align?: string }>`
     }
   }}
   
+`
+const TitleBox = styled.View`
+  display: flex;
+  flex-direction: column;
 `
 const ActionBox = styled.View<{ align?: string }>`
   flex:1;

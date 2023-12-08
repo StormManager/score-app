@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { PAGE_NAME as Share } from '../MainTab/Share';
 import { SCREEN_NAME as Main } from '../../screens/Main';
 import { LoginStackProps } from '../../utils/types/navigation';
+import CBStyles from '../../styles/CBStyles';
 interface IMarginBoxProps {
   mt?: string;
   mb?: string;
@@ -50,7 +51,7 @@ const Pages = ({ route, navigation }: LoginStackProps<"P_LOGIN">) => {
 
             }
             defaultValue="test"
-            padding="12px 24px"
+            padding={`${CBStyles.adjustScale(12)}px ${CBStyles.adjustScale(24)}px`}
             rules={{
               required: '필수 입력 항목 입니다.',
 
@@ -62,7 +63,7 @@ const Pages = ({ route, navigation }: LoginStackProps<"P_LOGIN">) => {
             isPassword={true}
             autoCapitalize="none"
             placeholder="비밀번호"
-            padding="12px 24px"
+            padding={`${CBStyles.adjustScale(12)}px ${CBStyles.adjustScale(24)}px`}
             rules={{
               required: '필수 입력 항목 입니다.',
 

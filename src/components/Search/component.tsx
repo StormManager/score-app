@@ -1,14 +1,15 @@
 import React, { useRef } from "react"
-import styled, { useTheme } from "styled-components/native"
-import RefTextInput from "../RefTextInput"
 import { FormProvider, useForm } from "react-hook-form"
-import { Dimensions, Pressable } from "react-native"
+import styled, { useTheme } from "styled-components/native"
+import CBStyles from "../../styles/CBStyles"
 import { AntDesignIcon } from "../Icon"
+import RefTextInput from "../RefTextInput"
 import Typography from "../Typography"
-const Component = ({ isTablet }: { isTablet: boolean }) => {
+const Component = ({ isTablet, placeholder }: { isTablet: boolean, placeholder: string }) => {
   const themeApp = useTheme();
   const form = useForm({ mode: 'all' });
   const searchRef = useRef(null);
+
   return (
     <Container>
       <FormProvider {...form}>
@@ -17,8 +18,8 @@ const Component = ({ isTablet }: { isTablet: boolean }) => {
             name="search"
             ref={searchRef}
             autoCapitalize="none"
-            placeholder="방 검색"
-            padding="12px 24px"
+            placeholder={placeholder}
+            padding={`${CBStyles.adjustScale(12)}px ${CBStyles.adjustScale(24)}px`}
           />
         </InputBox>
         {isTablet
@@ -48,7 +49,7 @@ const Container = styled.View`
 `
 const SearchButton = styled.Pressable`
   width: 55px;
-  height: 100%;
+  aspect-ratio: 1;
   max-height: 48px;
   align-items: center;
   justify-content: center;

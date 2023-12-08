@@ -188,6 +188,8 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
               <InputContainer>
                 <StyledTextInput
                   {...textInputProps}
+                  textBreakStrategy='highQuality'
+                  autoCapitalize={'none'}
                   keyboardType={type}
                   onChangeText={onChange}
                   placeholderTextColor={themeApp.colors.gray[7]}
@@ -202,12 +204,6 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
               {/* Suffix */}
               {isEditable && (
                 <>
-                  {/* <TimerContainer
-                      timer={timer.remainTime > 0}
-                      isAuth={suffix.isAuth}>
-                      {timerContent}
-                    </TimerContainer> */}
-
                   {timer.remainTime > 0 && timer.isRunning && (
                     <TimerContainer
                       timer={timer.remainTime > 0}
