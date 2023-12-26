@@ -9,6 +9,12 @@ const Component = () => {
   const themeApp = useTheme();
   return <Container>
     <ImageContainer>
+      <DimContainer >
+        <FastImage source={require("../../assets/icons/icon-checked-fill-20.png")} style={{
+          width: CBStyles.adjustScale(48),
+          height: CBStyles.adjustScale(48)
+        }} />
+      </DimContainer>
       <FastImage source={{
         uri: "https://img.freepik.com/free-photo/music-notes-on-scores_144627-16359.jpg",
         priority: "high",
@@ -73,6 +79,19 @@ const ImageContainer = styled.View`
   overflow: hidden;
   position: relative;
 `
+const DimContainer = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background-color:#1D1B2099;
+`
+
 const TitleContainer = styled.View`
   position: absolute;
   bottom: ${CBStyles.adjustScale(16)}px;

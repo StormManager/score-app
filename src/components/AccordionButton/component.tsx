@@ -1,33 +1,25 @@
-import Typography from '../../components/Typography';
-import CBStyles from '../../styles/CBStyles';
-import React, { useRef, useState } from 'react';
-import { Animated, Easing } from 'react-native';
+import React from 'react';
+import { Animated } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import styled, { useTheme } from 'styled-components/native';
+import Typography from '../../components/Typography';
+import CBStyles from '../../styles/CBStyles';
+
+const ICON_WIDTH = CBStyles.adjustScale(20)
 
 interface IAccordionButtonProps {
   onPressHandleContainer: () => void;
   onPressAddScore: () => void;
   onPressLocalImage: () => void;
+  animateButton: ({ isClose }: { isClose?: boolean }) => void;
+  animationValue: Animated.Value;
 }
 
-const Component = ({ onPressHandleContainer, onPressAddScore, onPressLocalImage }: IAccordionButtonProps) => {
-  const animationValue = useRef(new Animated.Value(0)).current;
+const Component = ({ onPressHandleContainer, onPressAddScore, animationValue, animateButton, onPressLocalImage }: IAccordionButtonProps) => {
   const themeApp = useTheme();
-  const [isExtend, setIsExtend] = useState<boolean>(false)
-  const animateButton = () => {
-    Animated.timing(animationValue, {
-      toValue: !isExtend ? 1 : 0,
-      duration: 300,
-      easing: Easing.ease,
-      useNativeDriver: false,
-    }).start();
-    setIsExtend(!isExtend)
-  };
-
   const renderAnimatedItems = () => {
     const items = [{
-      text: "악보 추가",
+      text: "악보 등록",
       icon: require("../../assets/icons/score_add.png"),
       onPress: onPressAddScore,
     }, {
@@ -57,11 +49,13 @@ const Component = ({ onPressHandleContainer, onPressAddScore, onPressLocalImage 
         ]}
       ><ParentButton onPress={() => {
         item.onPress()
-        animateButton()
+        animateButton({
+          isClose: false
+        })
       }}>
           <FastImage source={item.icon} style={{
-            width: CBStyles.adjustScale(20),
-            height: CBStyles.adjustScale(20)
+            width: ICON_WIDTH,
+            aspectRatio: 1
           }} />
           <Typography text={"Button01SB"} textColor={themeApp.colors.primary[0]}>{item.text}</Typography>
         </ParentButton>
@@ -73,10 +67,10 @@ const Component = ({ onPressHandleContainer, onPressAddScore, onPressLocalImage 
     <Container>
       {renderAnimatedItems()}
 
-      <PressableButton style={CBStyles.baseBoxShadow} onPress={animateButton}>
+      <PressableButton style={CBStyles.baseBoxShadow} onPress={() => animateButton({ isClose: false })}>
         <FastImage source={require("../../assets/icons/send.png")} style={{
-          width: CBStyles.adjustScale(20),
-          height: CBStyles.adjustScale(20)
+          width: ICON_WIDTH,
+          aspectRatio: 1
         }} />
         <Typography text={"Button01SB"} textColor={themeApp.colors.white}>악보 보내기</Typography>
       </PressableButton>

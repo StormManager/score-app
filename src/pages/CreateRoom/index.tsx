@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled, { css, useTheme } from "styled-components/native";
-import Header from "../../layouts/Header";
-import { RootStackProps } from "../../utils/types/navigation";
-import Typography from "../../components/Typography";
-import RefTextInput from "../../components/RefTextInput";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import FastImage from "react-native-fast-image";
+import styled, { css, useTheme } from "styled-components/native";
+import RefTextInput from "../../components/RefTextInput";
+import Typography from "../../components/Typography";
+import Header from "../../layouts/Header";
 import CBStyles from "../../styles/CBStyles";
+import { RootStackProps } from "../../utils/types/navigation";
 export const PAGE_NAME = "P_CREATE_ROOM"
 
 interface IBoxProps {
@@ -24,7 +24,6 @@ const Pages = ({ navigation }: RootStackProps<"P_CREATE_ROOM">) => {
   const roomPasswordRef = useRef(null);
   const totalUserRef = useRef(null);
   const handleCreateRoom = (data: FieldValues) => {
-    console.log(data.roomName)
     navigation.replace("P_SHARE_ROOM", {
       screen: "D_SHARE_ROOM",
       params: {
@@ -37,7 +36,6 @@ const Pages = ({ navigation }: RootStackProps<"P_CREATE_ROOM">) => {
   }
   const totalUserData = watch("totalUser");
   useEffect(() => {
-    console.log(totalUserData)
     if (Number(totalUserData) > 30) {
       setValue("totalUser", "30")
     }

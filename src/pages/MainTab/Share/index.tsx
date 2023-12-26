@@ -91,9 +91,7 @@ const Pages = ({ navigation }: MainTabStackProps<"T_SHARE">) => {
       setShowModal(true)
     }
   }, [selectData])
-  useEffect(() => {
-    console.log(isTablet)
-  }, [isTablet])
+
   return (
 
 
@@ -154,6 +152,7 @@ export default Pages;
 const Container = styled.View`
   flex:1;
   padding: ${({ theme }) => theme.padding.outer};
+  background-color: ${({ theme }) => theme.colors.white};
 `
 const Title = styled.View`
   padding-bottom: ${`${CBStyles.adjustScale(16)}px`};

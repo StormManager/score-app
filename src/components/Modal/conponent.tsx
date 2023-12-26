@@ -1,11 +1,11 @@
-import React, { ReactNode, useRef, useState } from "react";
-import FastImage from 'react-native-fast-image';
-import Typography from "../Typography";
-import styled, { css, useTheme } from "styled-components/native";
-import Modal from "react-native-modal";
-import RefTextInput from "../RefTextInput";
+import React, { ReactNode, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import FastImage from 'react-native-fast-image';
+import Modal from "react-native-modal";
+import styled, { css, useTheme } from "styled-components/native";
 import CBStyles from "../../styles/CBStyles";
+import RefTextInput from "../RefTextInput";
+import Typography from "../Typography";
 
 interface IModalProps {
   showModal: boolean;

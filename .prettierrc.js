@@ -25,7 +25,6 @@ module.exports = {
         "~screens(.*)$",
         "~store(.*)$",
         "~styles(.*)$",
-        "~layouts(.*)$",
         "~utils(.*)$",
         "^[./]"
     ],

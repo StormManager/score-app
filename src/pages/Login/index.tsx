@@ -1,15 +1,13 @@
 import React, { useRef } from 'react';
-import { Text } from 'react-native';
+import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import styled, { css, useTheme } from 'styled-components/native';
-import RefTextInput from '../../components/RefTextInput';
-import { FieldValue, FieldValues, FormProvider, useForm } from 'react-hook-form';
-import Typography from '../../components/Typography';
 import ButtonRoundSns from '../../components/ButtonRoundSns';
-import { useNavigation } from '@react-navigation/native';
-import { PAGE_NAME as Share } from '../MainTab/Share';
+import RefTextInput from '../../components/RefTextInput';
+import Typography from '../../components/Typography';
 import { SCREEN_NAME as Main } from '../../screens/Main';
-import { LoginStackProps } from '../../utils/types/navigation';
 import CBStyles from '../../styles/CBStyles';
+import { LoginStackProps } from '../../utils/types/navigation';
+import { PAGE_NAME as Share } from '../MainTab/Share';
 interface IMarginBoxProps {
   mt?: string;
   mb?: string;
@@ -28,7 +26,6 @@ const Pages = ({ route, navigation }: LoginStackProps<"P_LOGIN">) => {
   const passwordRef = useRef(null);
   const idRef = useRef(null);
   const onSubmit = (props: FieldValues) => {
-    console.log(props);
     navigation.replace(Main, { screen: Share })
   }
   return (

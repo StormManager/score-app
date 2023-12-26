@@ -1,9 +1,9 @@
 import React, { memo } from "react";
-import { useNavigation } from "@react-navigation/native";
-import styled, { useTheme } from "styled-components/native";
-import { css } from "styled-components";
-import Typography from "../components/Typography";
 import { Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { css } from "styled-components";
+import styled, { useTheme } from "styled-components/native";
+import Typography from "../components/Typography";
 
 type Props = {
   label?: string;
@@ -21,7 +21,6 @@ const Header: React.FC<Props> = ({ label, subLabel, back = true, actions, border
       <Box align="flex-start">
         {back && (
           <BackButton onPress={() => {
-            console.log(navigation.canGoBack())
             if (navigation.canGoBack()) {
               navigation.goBack()
             }
@@ -54,7 +53,7 @@ const Container = styled.View <{ border: boolean }> `
     if (border) {
       return css`
         border-bottom-width: 1px;
-        border-bottom-color: ${({ theme }) => theme.colors.gray[8]};
+        border-bottom-color: ${theme.colors.gray[8]}
       `
     }
   }}

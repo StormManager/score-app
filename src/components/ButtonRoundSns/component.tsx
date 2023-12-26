@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { Platform } from 'react-native';
+import React from 'react';
 import styled, { css } from 'styled-components/native';
 
 import {
@@ -18,9 +17,7 @@ const Component = ({
   typeSns,
   size,
   mr,
-  onPressEvent = () => {
-    console.log('sns 라운드 버튼을 누르셨습니다.');
-  },
+  onPressEvent,
 }: ISnsButtonProps) => {
 
 

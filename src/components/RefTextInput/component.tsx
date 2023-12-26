@@ -1,14 +1,16 @@
-import React, { ForwardedRef, ReactNode, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import EyeOff from '~assets/icons/TextInput/eyeOff.svg';
-import EyeOn from '~assets/icons/TextInput/eyeOn.svg';
-import { Controller, FieldValues, RegisterOptions, useFormContext, FieldErrors } from 'react-hook-form';
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+import React, { ReactNode, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { Alert, Dimensions, Modal, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, ViewStyle } from 'react-native';
+import { ScrollView } from 'native-base';
+import { Controller, FieldValues, RegisterOptions, useFormContext } from 'react-hook-form';
 import styled, { css, useTheme } from 'styled-components/native';
-import Typography from '../Typography';
-import { Alert, TextInput, TouchableOpacity, ViewStyle } from 'react-native';
-import { textStyles } from '../Typography/styles';
+import CBStyles from '../../styles/CBStyles';
 import { formattedTimer } from '../../utils/dateFormatter';
 import { AntDesignIcon } from '../Icon';
-import { StyleProp } from 'react-native';
+import Typography from '../Typography';
+import { textStyles } from '../Typography/styles';
+import EyeOff from '~assets/icons/TextInput/eyeOff.svg';
+import EyeOn from '~assets/icons/TextInput/eyeOn.svg';
 interface ISuffixProps {
   isNeedDelete?: boolean;
   timer?: number;
@@ -29,6 +31,8 @@ export interface ITextInputProps {
   suffix?: ISuffixProps;
   caption?: string;
   style: ViewStyle;
+  onDropDownPress?: () => void;
+  dropdownList?: string[];
   [rest: string]: any;
 }
 interface ITimerProps {
@@ -43,7 +47,7 @@ interface IStyleProps {
   isEditable?: boolean;
   editable?: boolean;
   isError?: boolean;
-  focus?: boolean;
+  $focus?: boolean;
 }
 interface ITextInputStyleProps {
   text: string;
@@ -54,7 +58,8 @@ interface ITextInputStyleProps {
   editable: boolean;
   paddings?: string;
 }
-
+const FULL_HEIGHT = Dimensions.get('window').height;
+const SCROLL_VIEW_MAX_HEIGHT = 240;
 const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
   const {
     name,
@@ -68,11 +73,14 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
     suffix,
     padding,
     style,
+    onDropDownPress,
+    dropdownList
   } = props;
   const {
     control,
     watch,
     formState: { errors },
+    setValue,
     resetField,
   } = useFormContext<FieldValues>();
   const inputRef = useRef<TextInput | null>(null);
@@ -86,12 +94,42 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
     firstRunning: false,
   });
   const [isDisabled, setIsDisabled] = useState<boolean>();
+  const [focus, setFocus] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
-  const [focus, setFocused] = useState<boolean>(false);
   const data = watch(name);
   const [isShowing, setIsShowing] = useState(false);
   const themeApp = useTheme();
+  const [dropdownTop, setDropdownTop] = useState(0);
+  const [width, setWidth] = useState(0);
+  const touchableOpacityRef = useRef<TouchableOpacity | null>(null);
 
+  useEffect(() => {
+    if (!isVisible || !dropdownList?.length) {
+      return;
+    }
+
+    touchableOpacityRef.current?.measure(
+      (_x, _y, width, height, _pageX, pageY) => {
+        setWidth(width);
+
+        if (
+          FULL_HEIGHT -
+          (pageY +
+            height +
+            12 +
+            Math.min(SCROLL_VIEW_MAX_HEIGHT, dropdownList?.length * 48)) >
+          10
+        ) {
+          setDropdownTop(pageY + height + 12);
+        } else {
+          setDropdownTop(
+            pageY - Math.min(SCROLL_VIEW_MAX_HEIGHT, dropdownList?.length * 48) - 12
+          );
+        }
+      }
+    );
+  }, [dropdownList?.length, isVisible]);
   // Props
   const containerProps = {
     editable: isEditable,
@@ -103,14 +141,13 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
     editable: isEditable,
   };
 
-  // Suffix Contents
+
   let suffixContent: string | ReactNode;
 
-  if (suffix && suffix.isNeedDelete && data) {
+  if (suffix?.isNeedDelete && data) {
     suffixContent = (
       <TouchableOpacity
         onPress={() => {
-          console.log(name, data)
           resetField(name);
           if (inputRef !== null)
             inputRef.current?.focus();
@@ -138,9 +175,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
   if (timer.remainTime > 0 && !timer.isRunning) {
     setTimer(prev => ({ ...prev, isRunning: true, firstRunning: true }));
   }
-  useEffect(() => {
-    console.log(data)
-  }, [data])
+
   useEffect(() => {
     if (timer.isRunning) {
       const timerId = setTimeout(() => {
@@ -162,7 +197,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
       control={control}
       rules={rules}
       defaultValue={defaultValue && defaultValue}
-      render={({ field: { onChange, onBlur } }) => {
+      render={({ field: { onChange } }) => {
         const regExp = /[^0-9]/g;
         const redTimerConditiion =
           // suffix?.timer &&
@@ -183,7 +218,19 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
               </LabelContainer>
             )}
             {/* TextInput */}
+            {onDropDownPress && (
+              <TouchableOpacity
+                style={styles.dropdown}
+                activeOpacity={1}
+                ref={touchableOpacityRef}
+                onPress={() => {
+                  onDropDownPress();
+                  console.log(isVisible)
+                  setIsVisible(!isVisible)
+                }} />
+            )}
             <ControlContainer
+              $focus={focus}
               {...containerProps}>
               <InputContainer>
                 <StyledTextInput
@@ -191,6 +238,13 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
                   textBreakStrategy='highQuality'
                   autoCapitalize={'none'}
                   keyboardType={type}
+                  editable={!onDropDownPress}
+                  onFocus={() => {
+                    setFocus(true)
+                  }}
+                  onBlur={(e) => {
+                    setFocus(false)
+                  }}
                   onChangeText={onChange}
                   placeholderTextColor={themeApp.colors.gray[7]}
                   text={'Button01R'}
@@ -207,7 +261,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
                   {timer.remainTime > 0 && timer.isRunning && (
                     <TimerContainer
                       timer={timer.remainTime > 0}
-                      isAuth={suffix && suffix.isAuth}>
+                      isAuth={suffix?.isAuth}>
                       <Typography
                         variant="h600"
                         weight="R"
@@ -227,7 +281,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
 
                   <SuffixContainer
                     suffix={!!suffixContent}
-                    isAuth={suffix && suffix.isAuth}>
+                    isAuth={suffix?.isAuth}>
                     {suffixContent}
                   </SuffixContainer>
                 </>
@@ -243,7 +297,7 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
                         resetField(name);
                         return suffix?.authPressEvent && suffix.authPressEvent(true);
                       }
-                      suffix?.authPressEvent && await suffix.authPressEvent(false);
+                      suffix?.authPressEvent && suffix.authPressEvent(false);
                     } catch (error: any) {
                       Alert.alert(
                         '인증번호',
@@ -266,10 +320,34 @@ const RefTextInput = forwardRef<TextInput, ITextInputProps>((props, ref) => {
                             ? themeApp.colors.gray[3]
                             : themeApp.colors.gray[6]
                     }>
-                    {suffix && suffix.authText}
+                    {suffix?.authText}
                   </Typography>
                 </AuthenticationButton>
               )}
+              <Modal visible={isVisible} transparent animationType="fade">
+                <TouchableWithoutFeedback style={{ zIndex: 999 }} onPress={() => setIsVisible(false)}>
+                  <DropDownContainer>
+                    <DropDownListBox
+                      style={
+                        CBStyles.baseBoxShadow
+                      }
+                      $dropdownTop={dropdownTop}
+                      $width={width}
+                    >
+                      <ScrollView showsVerticalScrollIndicator={false}>
+                        {dropdownList?.map((l) => (
+                          <DropDownListItem key={l} onPress={() => {
+                            setValue(name, l)
+                            setIsVisible(false)
+                          }}>
+                            <Typography text='Button01R' textColor={themeApp.colors.gray[2]}>{l}</Typography>
+                          </DropDownListItem>
+                        ))}
+                      </ScrollView>
+                    </DropDownListBox>
+                  </DropDownContainer>
+                </TouchableWithoutFeedback>
+              </Modal>
             </ControlContainer>
             {errors[name]?.message && (
               <LabelContainer>
@@ -312,18 +390,37 @@ const ControlContainer = styled.View<IStyleProps>`
       `;
     }
   }}
-  ${({ editable, theme, isError }) => {
+  ${({ editable, theme, isError, $focus }) => {
     if (editable) {
       return css`
         background-color: ${theme.colors.white};
         border: 1px solid ${isError
           ? theme.colors.error
-          : theme.colors.gray[6]};
+          : $focus ? theme.colors.gray[5] : theme.colors.gray[7]};
       `;
     }
   }}
 `;
-
+const DropDownContainer = styled.View`
+    width: ${CBStyles.windowWidth}px;
+    height: ${CBStyles.windowWidth}px;
+    align-items: center;
+`
+const DropDownListBox = styled.View<{ $dropdownTop?: number, $width?: number }>`
+    width:${({ $width }) => `${$width ?? 0}px`};
+    position: absolute;
+    z-index: 10;
+    top: ${({ $dropdownTop }) => `${$dropdownTop ?? 0}px`};;
+    right: ${CBStyles.adjustScale(40)}px;
+    border-radius:  ${CBStyles.adjustScale(8)}px;
+    background-color: ${({ theme }) => theme.colors.white};
+    max-height: ${SCROLL_VIEW_MAX_HEIGHT}px;
+`
+const DropDownListItem = styled.Pressable`
+  padding-top: ${CBStyles.adjustScale(17)}px;
+  padding-bottom: ${CBStyles.adjustScale(17)}px;
+  padding-left: ${CBStyles.adjustScale(16)}px;
+`
 const AuthenticationButton = styled.Pressable`
   min-width: 77px;
   text-align: center;
@@ -410,6 +507,23 @@ const SuffixContainer = styled.View<IStyleProps>`
     }
   }}
 `;
+
+
+const styles = StyleSheet.create({
+  dropdown: {
+    position: "absolute",
+    paddingInline: "1rem",
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: "flex-end",
+    alignItems: "center",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    zIndex: 1,
+    right: 0,
+  }
+});
 const TimerContainer = styled.View <IStyleProps> `
   position: absolute;
   width: 0;

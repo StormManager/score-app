@@ -1,12 +1,13 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
-import LoginScreen, { SCREEN_NAME as LoginScreenName } from './Login';
-import MainScreen, { SCREEN_NAME as MainScreenName } from './Main';
-import CreateRoom, { PAGE_NAME as CreateRoomPageName } from '../pages/CreateRoom';
-import ShareRoom, { PAGE_NAME as ShareRoomPageName } from '../pages/ShareRoom';
-import { RootScreenPrams } from '../utils/types/navigation';
 import { Dimensions, Platform } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen, { SCREEN_NAME as LoginScreenName } from './Login';
+import MainScreen from './Main';
 import { useTablet } from '../context/useIsTablet';
+import AddScore from "../pages/AddScore"
+import CreateRoom from '../pages/CreateRoom';
+import ShareRoom from '../pages/ShareRoom';
+import { RootScreenPrams } from '../utils/types/navigation';
 
 
 const Root = createNativeStackNavigator<RootScreenPrams>();
@@ -19,16 +20,16 @@ const Screen = () => {
     : aspectRatio < 1.5;
 
   useEffect(() => {
-    console.log(tablet, aspectRatio)
     setTablet({ isTablet: tablet, value: "" })
-  }, [tablet])
+  }, [setTablet, tablet])
   return (
     <Root.Navigator initialRouteName={LoginScreenName}>
       <Root.Group screenOptions={{ headerShown: false }}>
-        <Root.Screen name={LoginScreenName} component={LoginScreen} />
-        <Root.Screen name={MainScreenName} component={MainScreen} />
-        <Root.Screen name={CreateRoomPageName} component={CreateRoom} />
-        <Root.Screen name={ShareRoomPageName} component={ShareRoom} />
+        <Root.Screen name={"S_LOGIN"} component={LoginScreen} />
+        <Root.Screen name={"S_MAIN"} component={MainScreen} />
+        <Root.Screen name={"P_CREATE_ROOM"} component={CreateRoom} />
+        <Root.Screen name={"P_SHARE_ROOM"} component={ShareRoom} />
+        <Root.Screen name={"P_ADD_SCORE"} component={AddScore} />
       </Root.Group>
     </Root.Navigator>
   );

@@ -13,6 +13,7 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "experimentalDecorators": true,
+        "downlevelIteration": true,
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "baseUrl": "./src",
@@ -23,7 +24,6 @@
             "~blocks/*": ["components/blocks/*"],
             "~pages/*": ["components/pages/*"],
             "~hooks/*": ["hooks/*"],
-            "~layouts/*": ["layouts/*"],
             "~styles/*": ["styles/*"],
             "~utils/*": ["utils/*"],
             "~components/*": ["components/*"]
@@ -58,7 +58,6 @@
                     "~hooks": "./src/hooks",
                     "~hook": "./src/hook",
                     "~utils": "./src/utils",
-                    "~layouts": "./src/layouts",
                     "~theme": "./src/theme.ts",
                     "~atoms": "./src/atoms",
                     "~defaultStyle": "./src/defaultStyle"

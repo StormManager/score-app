@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 
+import { Animated, Easing, TouchableNativeFeedback, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import FastImage from 'react-native-fast-image';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Asset, launchImageLibrary } from 'react-native-image-picker';
+import { Asset } from 'react-native-image-picker';
 import styled from 'styled-components/native';
 import SidebarContents from './components/SidebarContents';
 import Header from '../../layouts/Header';
 import CBStyles from '../../styles/CBStyles';
+import InviteMember from "../InviteMember"
+import ScoreHistory from "../ScoreHistory"
 import AccordionButton from '~components/AccordionButton';
 import Modal from '~components/Modal';
 import ScoreCard from '~components/ScoreCard';
 import Search from '~components/Search';
 import { usePermission } from '~hooks/usePermission';
+import { handleImagePicker } from '~utils/image';
 import { DrawerParam, DrawerStackProps, RootStackProps } from '~utils/types/navigation';
 export const PAGE_NAME = 'P_SHARE_ROOM';
 
@@ -23,47 +27,45 @@ const Drawer = createDrawerNavigator<DrawerParam>();
 const Pages = ({ route, navigation }: DrawerStackProps<'D_SHARE_ROOM'>) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const { requestPermission, setPermissionRequiredParams } = usePermission();
-  const [reviewImage, setReviewImage] = useState<Asset[]>([]);
+  const [reviewImage, setReviewImage] = useState<Asset>();
+  const animationValue = useRef(new Animated.Value(0)).current;
+  const [isExtend, setIsExtend] = useState<boolean>(false)
+  const animateButton = ({ isClose }: { isClose?: boolean }) => {
+    if (isClose) {
+      Animated.timing(animationValue, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.ease,
+        useNativeDriver: false,
+      }).start();
+      setIsExtend(false)
+    } else {
+      Animated.timing(animationValue, {
+        toValue: !isExtend ? 1 : 0,
+        duration: 300,
+        easing: Easing.ease,
+        useNativeDriver: false,
+      }).start();
+      setIsExtend(!isExtend)
+    }
+
+  };
+
   const onCloseModal = () => {
     setShowModal(false)
   }
-  const IMAGE_SELECT_LIMIT_COUNT = 1;
   const { roomName, totalUser } = route.params;
   const handleOnPressLocalImage = async () => {
     setTimeout(async () => {
-      const permission = await requestPermission("ALBUM");
-      if (permission.status === "blocked") {
-        setPermissionRequiredParams({
-          visible: true,
-          serviceName: "",
-          permissionName: permission.name
-        });
-        return;
+
+      const resultImage = await handleImagePicker(requestPermission, setPermissionRequiredParams);
+      if (resultImage) {
+        setReviewImage(resultImage);
       }
-
-      const result = await launchImageLibrary({
-        mediaType: "photo",
-        selectionLimit: IMAGE_SELECT_LIMIT_COUNT
-      })
-
-      if (result.didCancel || result.errorCode) return;
-
-      const resultImage =
-        result?.assets &&
-        result.assets.map(image => {
-          return {
-            name: image.fileName,
-            uri: image.uri,
-            type: image.type
-          };
-        });
-      if (resultImage?.length && resultImage?.length > 0) {
-        setReviewImage([...reviewImage, ...(resultImage as Asset[])].slice(-3));
-      }
-    }, 500);
+    }, 100);
   };
   const handleOnPressAddScore = () => {
-
+    navigation.navigate("P_ADD_SCORE")
   }
   const handleOnPressHandleContainer = () => {
     setShowModal(!showModal);
@@ -72,16 +74,20 @@ const Pages = ({ route, navigation }: DrawerStackProps<'D_SHARE_ROOM'>) => {
 
   return (
     <>
-      <Container>
-        <Header back={true} border={true} label={roomName} subLabel={`4/${totalUser ?? ""}명`} actions={
-          <HeaderAction onPress={() => navigation.openDrawer()}>
-            <FastImage source={require("~assets/images/menu.png")} resizeMode='contain' style={{ width: 24, height: 24 }} />
-          </HeaderAction>
-        } />
-        <GestureHandlerRootView>
-          <ScoreScrollView showsVerticalScrollIndicator={false} bounces />
-        </GestureHandlerRootView>
-        <AccordionButton onPressAddScore={handleOnPressAddScore} onPressHandleContainer={handleOnPressHandleContainer} onPressLocalImage={handleOnPressLocalImage} />
+      <Container style={{ flex: 1, backgroundColor: 'red', height: 300 }} onPress={() => animateButton({
+        isClose: true
+      })}>
+        <View style={{ flex: 1 }} >
+          <Header back={true} border={true} label={roomName} subLabel={`4/${totalUser ?? ""}명`} actions={
+            <HeaderAction onPress={() => navigation.openDrawer()}>
+              <FastImage source={require("../../assets/images/menu.png")} resizeMode='contain' style={{ width: 24, height: 24 }} />
+            </HeaderAction>
+          } />
+          <GestureHandlerRootView>
+            <ScoreScrollView showsVerticalScrollIndicator={false} bounces />
+          </GestureHandlerRootView>
+          <AccordionButton onPressAddScore={handleOnPressAddScore} animateButton={animateButton} animationValue={animationValue} onPressHandleContainer={handleOnPressHandleContainer} onPressLocalImage={handleOnPressLocalImage} />
+        </View>
       </Container>
       <Modal
         showModal={showModal}
@@ -116,8 +122,10 @@ const Pages = ({ route, navigation }: DrawerStackProps<'D_SHARE_ROOM'>) => {
 const Draw = ({ route }: RootStackProps<'P_SHARE_ROOM'>) => {
   return (
     <GestureConatainer>
-      <Drawer.Navigator screenOptions={{ drawerType: "front", drawerPosition: 'right', headerShown: false }} drawerContent={() => <SidebarContents />} >
+      <Drawer.Navigator screenOptions={{ drawerType: "front", drawerPosition: 'right', headerShown: false }} drawerContent={(props) => <SidebarContents {...props} />} >
         <Drawer.Screen name="D_SHARE_ROOM" component={Pages} initialParams={route.params.params} />
+        <Drawer.Screen name="D_INVITE_MEMBER" component={InviteMember} initialParams={route.params.params} />
+        <Drawer.Screen name="D_SCORE_HISTORY" component={ScoreHistory} initialParams={route.params.params} />
       </Drawer.Navigator>
     </GestureConatainer >
   );
@@ -125,9 +133,9 @@ const Draw = ({ route }: RootStackProps<'P_SHARE_ROOM'>) => {
 
 export default Draw;
 
-const Container = styled.View`
+const Container = styled(TouchableNativeFeedback)`
   flex: 1;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 const HeaderAction = styled.Pressable`
   width: 56px;

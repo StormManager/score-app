@@ -3,9 +3,8 @@ import { Dimensions } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import styled, { css, useTheme } from 'styled-components/native';
 import Typography from '../../../../../components/Typography';
-import { useTablet } from '../../../../../context/useIsTablet';
 
-const { height, width } = Dimensions.get('screen')
+const { width } = Dimensions.get('screen')
 interface IUserProps {
   id: number;
   userName: string;
@@ -22,9 +21,8 @@ export interface IShareRoomCardProps {
   isLock: boolean;
   onPressed?: () => void
 }
-const Component = ({ id, title, totalCount, applyUsers, isLock, onPressed, isTablet }: IShareRoomCardProps) => {
+const Component = ({ title, totalCount, applyUsers, isLock, onPressed, isTablet }: IShareRoomCardProps) => {
   const themeApp = useTheme();
-  console.log(isTablet)
   return (
     <Container onPress={onPressed} tablet={isTablet as boolean}>
       <FastImageBox source={require("~assets/images/defaultscore.png")} resizeMode={"cover"} />

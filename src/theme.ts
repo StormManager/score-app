@@ -10,7 +10,7 @@ interface Colors {
     primary: ColorShades;
 }
 
-interface Theme {
+interface ITheme {
     font: {
         fontFamily: string;
     };
@@ -55,7 +55,7 @@ const colors: Colors = {
 const { width, height } = Dimensions.get("window");
 const aspectRatio = height / width;
 const isTablet = Platform.OS === "android" ? aspectRatio < 1.6 : aspectRatio < 1.5;
-const Theme: Theme = {
+const Theme: ITheme = {
     font: {
         fontFamily: "Pretendard-Regular"
     },

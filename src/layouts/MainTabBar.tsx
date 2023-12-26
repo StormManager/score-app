@@ -1,22 +1,22 @@
+import { useEffect, useState } from "react";
+import { Pressable, Keyboard } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { TouchableOpacity, View, Text, Pressable, Keyboard } from "react-native";
 import FastImage from "react-native-fast-image";
 import styled, { useTheme } from "styled-components/native";
 import Typography from "../components/Typography";
-import { useEffect, useState } from "react";
 
-const shareGray = require('../assets/images/share_gray.png');
-const share = require('../assets/images/share.png');
-const containerGray = require('../assets/images/container_gray.png');
 const container = require('../assets/images/container.png');
+const containerGray = require('../assets/images/container_gray.png');
 const profile = require('../assets/images/profile.png');
+const share = require('../assets/images/share.png');
+const shareGray = require('../assets/images/share_gray.png');
 
 
-const labelMap = {
+const labelMap: Record<string, { label: string; icon: any; iconGray: any }> = {
   T_SHARE: { label: "악보공유방", icon: share, iconGray: shareGray },
   T_CONTAINER: { label: "악보창고", icon: container, iconGray: containerGray },
   T_MYPAGE: { label: "마이페이지", icon: profile, iconGray: profile },
-} as { [val: string]: { label: string; icon: any; iconGray: any } };
+};
 
 
 function MainTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
@@ -25,7 +25,7 @@ function MainTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   useEffect(() => {
 
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      //Whenever keyboard did show make it don't visible
+      // Whenever keyboard did show make it don't visible
       setVisible(false);
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
@@ -42,7 +42,6 @@ function MainTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
       <TabBox>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
-          console.log(route.name, options)
 
           const isFocused = state.index === index;
 
@@ -52,7 +51,6 @@ function MainTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
               target: route.key,
               canPreventDefault: true,
             });
-            console.log(!isFocused, !event.defaultPrevented)
             if (!isFocused && !event.defaultPrevented) {
               navigation.navigate(route.name, route.params);
             }
@@ -95,6 +93,7 @@ export default MainTabBar
 const TabContainer = styled.View`
   border-top-width: 1px;
   border-top-color: ${({ theme }) => theme.colors.gray[7]};
+  background-color: ${({ theme }) => theme.colors.white};
   height: 65px;
 `
 const TabBox = styled.View`

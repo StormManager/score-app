@@ -25,12 +25,8 @@ type ProviderProp = {
 const TabletProvider = ({ children }: ProviderProp) => {
   const [state, dispatch] = useReducer(
     (state: State, action: Action) => {
-      console.log(action)
       switch (action.type) {
         case "SET_TABLET":
-          console.log("asd");
-          console.log({ ...state, ...action.payload });
-          console.log("asd");
           return { ...state, ...action.payload };
         default:
           return state;

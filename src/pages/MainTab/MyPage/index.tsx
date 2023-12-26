@@ -8,7 +8,6 @@ export interface IPageProps {
 export const PAGE_NAME = 'T_MYPAGE';
 const Pages = ({ route, navigation }: MainTabStackProps<"T_MYPAGE">) => {
   const params = route.params;
-  console.log(params)
   return (
     <View />
   );
